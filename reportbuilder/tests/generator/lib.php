@@ -84,7 +84,7 @@ class core_reportbuilder_generator extends component_generator_base {
 
         // Update additional record properties.
         unset($record['reportid'], $record['uniqueidentifier']);
-        if ($properties = array_intersect_key($record, column::properties_definition())) {
+        if ($properties = column::properties_filter((object) $record)) {
             $column->set_many($properties)->update();
         }
 
@@ -112,7 +112,7 @@ class core_reportbuilder_generator extends component_generator_base {
 
         // Update additional record properties.
         unset($record['reportid'], $record['uniqueidentifier']);
-        if ($properties = array_intersect_key($record, filter::properties_definition())) {
+        if ($properties = filter::properties_filter((object) $record)) {
             $filter->set_many($properties)->update();
         }
 
@@ -140,7 +140,7 @@ class core_reportbuilder_generator extends component_generator_base {
 
         // Update additional record properties.
         unset($record['reportid'], $record['uniqueidentifier']);
-        if ($properties = array_intersect_key($record, filter::properties_definition())) {
+        if ($properties = filter::properties_filter((object) $record)) {
             $condition->set_many($properties)->update();
         }
 
@@ -205,6 +205,9 @@ class core_reportbuilder_generator extends component_generator_base {
             $record['timescheduled'] = usergetmidnight(time() + DAYSECS);
         }
 
-        return schedule_helper::create_schedule((object) $record);
+        // Time to use as comparison against current date (null means current time).
+        $timenow = $record['timenow'] ?? null;
+
+        return schedule_helper::create_schedule((object) $record, $timenow);
     }
 }
