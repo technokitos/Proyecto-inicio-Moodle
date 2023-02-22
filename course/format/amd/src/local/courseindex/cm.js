@@ -65,7 +65,7 @@ export default class Component extends DndCmItem {
      * @return {Component}
      */
     static init(target, selectors) {
-        return new this({
+        return new Component({
             element: document.getElementById(target),
             selectors,
         });

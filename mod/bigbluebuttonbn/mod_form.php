@@ -587,7 +587,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $action = new single_button(new moodle_url(qualified_me()),
             get_string('mod_form_field_participant_list_action_add', 'bigbluebuttonbn'),
             'post',
-            single_button::BUTTON_SECONDARY,
+            false,
             ['name' => 'bigbluebuttonbn_participant_selection_add']
         );
         $pformcontext = [

@@ -394,36 +394,6 @@ export default class extends BaseComponent {
     }
 
     /**
-     * Handle a toggle cm selection.
-     *
-     * @param {Element} target the dispatch action element
-     */
-    async _requestToggleSelectionCm(target) {
-        const cmId = target.dataset.id;
-        if (!cmId) {
-            return;
-        }
-        const value = target.checked ?? false;
-        const mutation = (value) ? 'cmSelect' : 'cmUnselect';
-        this.reactive.dispatch(mutation, [cmId]);
-    }
-
-    /**
-     * Handle a toggle section selection.
-     *
-     * @param {Element} target the dispatch action element
-     */
-    async _requestToggleSelectionSection(target) {
-        const sectionId = target.dataset.id;
-        if (!sectionId) {
-            return;
-        }
-        const value = target.checked ?? false;
-        const mutation = (value) ? 'sectionSelect' : 'sectionUnselect';
-        this.reactive.dispatch(mutation, [sectionId]);
-    }
-
-    /**
      * Basic mutation action helper.
      *
      * @param {Element} target the dispatch action element
@@ -436,66 +406,6 @@ export default class extends BaseComponent {
         }
         event.preventDefault();
         this.reactive.dispatch(mutationName, [target.dataset.id]);
-    }
-
-    /**
-     * Handle a course module duplicate request.
-     *
-     * @param {Element} target the dispatch action element
-     * @param {Event} event the triggered event
-     */
-    async _requestCmDuplicate(target, event) {
-        const cmId = target.dataset.id;
-        if (!cmId) {
-            return;
-        }
-        const sectionId = target.dataset.sectionid ?? null;
-        event.preventDefault();
-        this.reactive.dispatch('cmDuplicate', [cmId], sectionId);
-    }
-
-    /**
-     * Handle a delete cm request.
-     *
-     * @param {Element} target the dispatch action element
-     * @param {Event} event the triggered event
-     */
-    async _requestCmDelete(target, event) {
-        // Check we have an id.
-        const cmId = target.dataset.id;
-
-        if (!cmId) {
-            return;
-        }
-        const cmInfo = this.reactive.get('cm', cmId);
-
-        event.preventDefault();
-
-        const modalParams = {
-            title: getString('confirm', 'core'),
-            body: getString(
-                'deletechecktypename',
-                'moodle',
-                {
-                    type: cmInfo.modname,
-                    name: cmInfo.name,
-                }
-            ),
-            saveButtonText: getString('delete', 'core'),
-            type: ModalFactory.types.SAVE_CANCEL,
-        };
-
-        const modal = await this._modalBodyRenderedPromise(modalParams);
-
-        modal.getRoot().on(
-            ModalEvents.save,
-            e => {
-                // Stop the default save button behaviour which is to close the modal.
-                e.preventDefault();
-                modal.destroy();
-                this.reactive.dispatch('cmDelete', [cmId]);
-            }
-        );
     }
 
     /**

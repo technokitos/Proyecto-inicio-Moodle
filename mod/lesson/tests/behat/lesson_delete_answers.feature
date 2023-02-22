@@ -18,9 +18,11 @@ branch table contents
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
     And the following "activities" exist:
-      | activity   | name             | course | idnumber    |
-      | lesson     | Test lesson name | C1     | lesson1     |
-    And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
+      | activity   | name             | intro                   | course | idnumber    |
+      | lesson     | Test lesson name | Test lesson description | C1     | lesson1     |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
     And I follow "Add a content page"
     And I set the following fields to these values:
       | Page title | First page name |
@@ -53,8 +55,11 @@ branch table contents
       | id_answer_editor_1 | |
     And I press "Save page"
     And I should not see "Previous page"
-    And I am on the "Test lesson name" "lesson activity" page logged in as student1
-    Then I should see "First page contents"
+    And I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
+    And I should see "First page contents"
     And I should not see "Previous page"
     And I press "Next page"
     And I should see "1 + 1?"
@@ -73,8 +78,11 @@ branch table contents
       | id_answer_editor_1 | |
     And I press "Save page"
     And I should not see "Incorrect answer"
-    And I am on the "Test lesson name" "lesson activity" page logged in as student1
-    Then I should see "First page contents"
+    And I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
+    And I should see "First page contents"
     And I press "Next page"
     And I should see "1 + 1?"
     And I set the following fields to these values:

@@ -10,4 +10,4 @@ Import procedure:
 - Check the minim php driver version in https://docs.mongodb.com/drivers/php#compatibility and change the
   value in the "are_requirements_met" method if necessary.
 
-This version (1.15.0) requires PHP mongodb extension >= 1.15.0
+This version (1.15.0) requires PHP mongodb extension >= 1.14.0

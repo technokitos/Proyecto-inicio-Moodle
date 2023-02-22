@@ -22,7 +22,7 @@ use renderer_base;
 use core\external\exporter;
 use core_reportbuilder\datasource;
 use core_reportbuilder\form\condition;
-use core_reportbuilder\local\report\filter;
+use core_reportbuilder\local\models\filter;
 
 /**
  * Custom report conditions exporter class
@@ -96,12 +96,13 @@ class custom_report_conditions_exporter extends exporter {
     protected function get_other_values(renderer_base $output): array {
         /** @var datasource $report */
         $report = $this->related['report'];
+        $reportid = $report->get_report_persistent()->get('id');
 
         // Current condition instances contained in the report.
-        $conditions = $report->get_active_conditions();
+        $conditioninstances = filter::get_condition_records($reportid, 'filterorder');
         $conditionidentifiers = array_map(static function(filter $condition): string {
-            return $condition->get_unique_identifier();
-        }, $conditions);
+            return $condition->get('uniqueidentifier');
+        }, $conditioninstances);
 
         $availableconditions = [];
 
@@ -127,11 +128,11 @@ class custom_report_conditions_exporter extends exporter {
             ];
         }
 
-        // Generate conditions form if any present.
-        $conditionspresent = !empty($conditions);
+        // Generate filters form if report contains any filters.
+        $conditionspresent = !empty($conditioninstances);
         if ($conditionspresent) {
             $conditionsform = new condition(null, null, 'post', '', [], true, [
-                'reportid' => $report->get_report_persistent()->get('id'),
+                'reportid' => $reportid,
             ]);
             $conditionsform->set_data_for_dynamic_submission();
         }

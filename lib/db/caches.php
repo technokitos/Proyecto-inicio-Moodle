@@ -316,7 +316,6 @@ $definitions = array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'simpledata' => true,
-        'canuselocalstore' => true,
         'staticacceleration' => true,
         'staticaccelerationsize' => 5
     ),
@@ -486,13 +485,6 @@ $definitions = array(
     'h5p_content_type_translations' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simpledata' => true,
-    ],
-
-    // File cache for H5P Library ids.
-    'h5p_libraries' => [
-        'mode' => cache_store::MODE_APPLICATION,
-        'simplekeys' => true,
-        'canuselocalstore' => true
     ],
 
     // File cache for H5P Library files.

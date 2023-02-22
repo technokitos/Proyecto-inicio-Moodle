@@ -24,6 +24,7 @@ use core_form\dynamic_form;
 use core_reportbuilder\manager;
 use core_reportbuilder\permission;
 use core_reportbuilder\local\report\base;
+use core_reportbuilder\local\models\filter;
 use core_reportbuilder\local\models\report;
 
 /**
@@ -120,17 +121,22 @@ class condition extends dynamic_form {
 
         // Allow each condition instance to add itself to this form, wrapping each inside custom header/footer template.
         $conditioninstances = $this->get_report()->get_condition_instances();
-        foreach ($conditioninstances as $conditioninstance) {
-            $persistent = $conditioninstance->get_filter_persistent();
+
+        $conditions = filter::get_condition_records($this->get_report()->get_report_persistent()->get('id'), 'filterorder');
+        foreach ($conditions as $condition) {
+            $conditioninstance = $conditioninstances[$condition->get('uniqueidentifier')] ?? null;
+            if ($conditioninstance === null) {
+                continue;
+            }
 
             $entityname = $conditioninstance->get_entity_name();
             $displayvalue = $conditioninstance->get_header();
 
             $mform->addElement('html', $OUTPUT->render_from_template('core_reportbuilder/local/conditions/header', [
-                'id' => $persistent->get('id'),
+                'id' => $condition->get('id'),
                 'entityname' => $this->get_report()->get_entity_title($entityname),
                 'heading' => $displayvalue,
-                'sortorder' => $persistent->get('filterorder'),
+                'sortorder' => $condition->get('filterorder'),
                 'movetitle' => get_string('movecondition', 'core_reportbuilder', $displayvalue),
             ]));
 

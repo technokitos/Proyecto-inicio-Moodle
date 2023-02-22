@@ -213,7 +213,7 @@ class core_admin_renderer extends plugin_renderer_base {
             $output .= $this->container_end();
         }
 
-        $button = new single_button($continueurl, get_string('upgradestart', 'admin'), 'get', single_button::BUTTON_PRIMARY);
+        $button = new single_button($continueurl, get_string('upgradestart', 'admin'), 'get', true);
         $button->class = 'continuebutton';
         $output .= $this->render($button);
         $output .= $this->footer();

@@ -44,7 +44,7 @@ class slot_moved extends \core\event\base {
     protected function init() {
         $this->data['objecttable'] = 'quiz_slots';
         $this->data['crud'] = 'u';
-        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
     public static function get_name() {

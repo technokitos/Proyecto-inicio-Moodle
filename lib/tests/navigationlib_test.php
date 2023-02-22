@@ -14,6 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Unit tests for lib/navigationlib.php
+ *
+ * @package   core
+ * @category  test
+ * @copyright 2009 Sam Hemelryk
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later (5)
+ */
+
 namespace core;
 
 use action_link;
@@ -561,7 +570,7 @@ class navigationlib_test extends \advanced_testcase {
      *
      * @param bool $haschildren       Whether the navigation node has children nodes
      * @param bool $forceintomoremenu Whether to force the navigation node and its children into the "more" menu
-     * @dataProvider set_force_into_more_menu_provider
+     * @dataProvider test_set_force_into_more_menu_provider
      */
     public function test_set_force_into_more_menu(bool $haschildren, bool $forceintomoremenu) {
         // Create a navigation node.
@@ -588,7 +597,7 @@ class navigationlib_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function set_force_into_more_menu_provider(): array {
+    public function test_set_force_into_more_menu_provider(): array {
         return [
             'Navigation node without any children nodes; Force into "more" menu => true.' =>
                 [
@@ -613,7 +622,7 @@ class navigationlib_test extends \advanced_testcase {
      *
      * @param navigation_node $node The sample navigation node
      * @param bool $expected Whether the navigation node contains an action link
-     * @dataProvider is_action_link_provider
+     * @dataProvider test_is_action_link_provider
      * @covers navigation_node::is_action_link
      */
     public function test_is_action_link(navigation_node $node, bool $expected) {
@@ -625,7 +634,7 @@ class navigationlib_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function is_action_link_provider(): array {
+    public function test_is_action_link_provider(): array {
         return [
             'The navigation node has an action link.' =>
                 [
@@ -646,7 +655,7 @@ class navigationlib_test extends \advanced_testcase {
      * Test the action_link_actions method.
      *
      * @param navigation_node $node The sample navigation node
-     * @dataProvider action_link_actions_provider
+     * @dataProvider test_action_link_actions_provider
      * @covers navigation_node::action_link_actions
      */
     public function test_action_link_actions(navigation_node $node) {
@@ -678,7 +687,7 @@ class navigationlib_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function action_link_actions_provider(): array {
+    public function test_action_link_actions_provider(): array {
         return [
             'The navigation node has an action link with an action attached.' =>
                 [

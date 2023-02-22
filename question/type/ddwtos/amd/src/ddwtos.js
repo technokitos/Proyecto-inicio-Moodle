@@ -393,11 +393,6 @@ define([
                 drop.focus();
             }
         } else {
-            // Prevent the drag item drop into two drop-zone.
-            if (this.getClassnameNumericSuffix(drag, 'inplace')) {
-                return;
-            }
-
             this.setInputValue(this.getPlace(drop), this.getChoice(drag));
             drag.removeClass('unplaced')
                 .addClass('placed inplace' + this.getPlace(drop));

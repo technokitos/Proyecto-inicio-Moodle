@@ -30,7 +30,6 @@ define(
         'core/str',
         'core/url',
         'core/yui',
-        'core/modal_copy_to_clipboard',
         'core/modal_factory',
         'core/modal_events',
         'core/key_codes',
@@ -47,7 +46,6 @@ define(
         str,
         url,
         Y,
-        ModalCopyToClipboard,
         ModalFactory,
         ModalEvents,
         KeyCodes,
@@ -61,8 +59,8 @@ define(
         // component compatible formats and the default actions.js won't be necessary anymore.
         // Meanwhile, we filter the migrated actions.
         const componentActions = [
-            'moveSection', 'moveCm', 'addSection', 'deleteSection', 'cmDelete', 'cmDuplicate', 'sectionHide', 'sectionShow',
-            'cmHide', 'cmShow', 'cmStealth', 'sectionHighlight', 'sectionUnhighlight',
+            'moveSection', 'moveCm', 'addSection', 'deleteSection', 'sectionHide', 'sectionShow',
+            'cmHide', 'cmShow', 'cmStealth',
         ];
 
         // The course reactive instance.
@@ -965,15 +963,6 @@ define(
                     var actionItem = $(this),
                         sectionElement = actionItem.closest(SELECTOR.SECTIONLI),
                         sectionId = actionItem.closest(SELECTOR.SECTIONACTIONMENU).attr('data-sectionid');
-
-                    if (actionItem.attr('data-action') === 'permalink') {
-                        e.preventDefault();
-                        ModalCopyToClipboard.create({
-                            text: actionItem.attr('href'),
-                        }, str.get_string('sectionlink', 'course')
-                        );
-                        return;
-                    }
 
                     let isExecuted = true;
                     if (actionItem.attr('data-confirm')) {

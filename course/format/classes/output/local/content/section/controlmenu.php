@@ -82,7 +82,8 @@ class controlmenu implements named_templatable, renderable {
 
         // Convert control array into an action_menu.
         $menu = new action_menu();
-        $menu->set_kebab_trigger(get_string('edit'));
+        $icon = $output->pix_icon('i/menu', get_string('edit'));
+        $menu->set_menu_trigger($icon, 'btn btn-icon d-flex align-items-center justify-content-center');
         $menu->attributes['class'] .= ' section-actions';
         foreach ($controls as $value) {
             $url = empty($value['url']) ? '' : $value['url'];
@@ -271,29 +272,6 @@ class controlmenu implements named_templatable, renderable {
                     ],
                 ];
             }
-        }
-        if (
-            has_any_capability([
-                'moodle/course:movesections',
-                'moodle/course:update',
-                'moodle/course:sectionvisibility',
-            ], $coursecontext)
-        ) {
-            $sectionlink = new moodle_url(
-                '/course/view.php',
-                ['id' => $course->id],
-                "sectionid-{$section->id}-title"
-            );
-            $controls['permalink'] = [
-                'url' => $sectionlink,
-                'icon' => 'i/link',
-                'name' => get_string('sectionlink', 'course'),
-                'pixattr' => ['class' => ''],
-                'attr' => [
-                    'class' => 'icon',
-                    'data-action' => 'permalink',
-                ],
-            ];
         }
 
         return $controls;

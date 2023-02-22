@@ -125,10 +125,12 @@ Feature: Upload users
     And I should see "Users created: 4"
     And I press "Continue"
     # Boost check.
-    And I am on the "jonest@example.com" "user > editing" page
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    And I click on ".icon[title=Edit]" "css_element" in the "jonest@example.com" "table_row"
     And I should see "Boost"
     # Classic check.
-    And I am on the "reznor@example.com" "user > editing" page
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    And I click on ".icon[title=Edit]" "css_element" in the "reznor@example.com" "table_row"
     And I should see "Classic"
 
   @javascript

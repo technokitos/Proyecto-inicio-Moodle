@@ -218,7 +218,7 @@ class enrol_manual_plugin extends enrol_plugin {
 
         $button = new enrol_user_button($link, get_string('enrolusers', 'enrol_manual'), 'get');
         $button->class .= ' enrol_manual_plugin';
-        $button->type = single_button::BUTTON_PRIMARY;
+        $button->primary = true;
 
         $context = context_course::instance($instance->courseid);
         $arguments = array('contextid' => $context->id);

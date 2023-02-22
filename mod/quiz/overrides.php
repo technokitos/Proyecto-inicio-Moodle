@@ -25,6 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot.'/mod/quiz/lib.php');
 require_once($CFG->dirroot.'/mod/quiz/locallib.php');
+require_once($CFG->dirroot.'/mod/quiz/override_form.php');
+
 
 $cmid = required_param('cmid', PARAM_INT);
 $mode = optional_param('mode', '', PARAM_ALPHA); // One of 'user' or 'group', default is 'group'.
@@ -233,7 +235,7 @@ foreach ($overrides as $override) {
         $groupcell = new html_table_cell();
         $groupcell->rowspan = count($fields);
         $groupcell->text = html_writer::link(new moodle_url($groupurl, ['group' => $override->groupid]),
-            format_string($override->name, true, ['context' => $context]) . $extranamebit);
+                $override->name . $extranamebit);
         $usercells[] = $groupcell;
     } else {
         $usercell = new html_table_cell();

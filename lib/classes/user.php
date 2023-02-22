@@ -530,18 +530,6 @@ class core_user {
     }
 
     /**
-     * Determine whether the given user ID is that of the current user. Useful for components implementing permission callbacks
-     * for preferences consumed by {@see fill_preferences_cache}
-     *
-     * @param stdClass $user
-     * @return bool
-     */
-    public static function is_current_user(stdClass $user): bool {
-        global $USER;
-        return $user->id == $USER->id;
-    }
-
-    /**
      * Check if the given user is an active user in the site.
      *
      * @param  stdClass  $user         user object
@@ -972,12 +960,13 @@ class core_user {
             });
         $preferences['badgeprivacysetting'] = array('type' => PARAM_INT, 'null' => NULL_NOT_ALLOWED, 'default' => 1,
             'choices' => array(0, 1), 'permissioncallback' => function($user, $preferencename) {
-                global $CFG;
-                return !empty($CFG->enablebadges) && self::is_current_user($user);
+                global $CFG, $USER;
+                return !empty($CFG->enablebadges) && $user->id == $USER->id;
             });
         $preferences['blogpagesize'] = array('type' => PARAM_INT, 'null' => NULL_NOT_ALLOWED, 'default' => 10,
             'permissioncallback' => function($user, $preferencename) {
-                return self::is_current_user($user) && has_capability('moodle/blog:view', context_system::instance());
+                global $USER;
+                return $USER->id == $user->id && has_capability('moodle/blog:view', context_system::instance());
             });
 
         $choices = [HOMEPAGE_SITE];
@@ -991,8 +980,8 @@ class core_user {
             'default' => get_default_home_page(),
             'choices' => $choices,
             'permissioncallback' => function ($user, $preferencename) {
-                global $CFG;
-                return self::is_current_user($user) &&
+                global $CFG, $USER;
+                return $user->id == $USER->id &&
                     (!empty($CFG->defaulthomepage) && ($CFG->defaulthomepage == HOMEPAGE_USER));
             }
         ];
@@ -1059,7 +1048,7 @@ class core_user {
             return false;
         }
 
-        if (self::is_current_user($user)) {
+        if ($user->id == $USER->id) {
             // Editing own profile.
             $systemcontext = context_system::instance();
             return has_capability('moodle/user:editownprofile', $systemcontext);

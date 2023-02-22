@@ -205,10 +205,11 @@ function uninstall_plugin($type, $name) {
     }
     $plugininfo = null;
 
-    // Perform clean-up task common for all the plugin/subplugin types.
+    // perform clean-up task common for all the plugin/subplugin types
 
-    // Delete the web service functions and pre-built services.
-    \core_external\util::delete_service_descriptions($component);
+    //delete the web service functions and pre-built services
+    require_once($CFG->dirroot.'/lib/externallib.php');
+    external_delete_descriptions($component);
 
     // delete calendar events
     $DB->delete_records('event', array('modulename' => $pluginname));
@@ -4768,7 +4769,7 @@ class admin_setting_sitesettext extends admin_setting_configtext {
      * Constructor.
      */
     public function __construct() {
-        call_user_func_array([parent::class, '__construct'], func_get_args());
+        call_user_func_array(['parent', '__construct'], func_get_args());
         $this->set_force_ltr(false);
     }
 
@@ -7208,7 +7209,7 @@ class admin_setting_manageauths extends admin_setting {
             if (file_exists($CFG->dirroot.'/auth/'.$auth.'/settings.php')) {
                 $settings = "<a href=\"settings.php?section=authsetting$auth\">{$txt->settings}</a>";
             } else if (file_exists($CFG->dirroot.'/auth/'.$auth.'/config.html')) {
-                throw new \coding_exception('config.html is no longer supported, please use settings.php instead.');
+                $settings = "<a href=\"auth_config.php?auth=$auth\">{$txt->settings}</a>";
             } else {
                 $settings = '';
             }
@@ -8850,10 +8851,6 @@ function admin_get_root($reload=false, $requirefulltree=true) {
  */
 function admin_apply_default_settings($node=null, $unconditional=true, $admindefaultsettings=array(), $settingsoutput=array()) {
     $counter = 0;
-
-    // This function relies heavily on config cache, so we need to enable in-memory caches if it
-    // is used during install when normal caching is disabled.
-    $token = new \core_cache\allow_temporary_caches();
 
     if (is_null($node)) {
         core_plugin_manager::reset_caches();

@@ -622,8 +622,7 @@ class question_attempt {
 
         // No files yet.
         $draftid = 0; // Will be filled in by file_prepare_draft_area.
-        $filearea = question_file_saver::clean_file_area_name('response_' . $name);
-        file_prepare_draft_area($draftid, $contextid, 'question', $filearea, null);
+        file_prepare_draft_area($draftid, $contextid, 'question', 'response_' . $name, null);
         return $draftid;
     }
 
@@ -1475,11 +1474,7 @@ class question_attempt {
         } else {
             $attemptstatedata = $this->get_question(false)->update_attempt_state_data_for_new_version(
                     $oldstep, $otherversion);
-
-            foreach ($oldstep->get_behaviour_data() as $name => $value) {
-                $attemptstatedata['-' . $name] = $value;
-            }
-            return $attemptstatedata;
+            return array_merge($attemptstatedata, $oldstep->get_behaviour_data());
         }
     }
 

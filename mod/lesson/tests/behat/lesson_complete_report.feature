@@ -16,9 +16,11 @@ Feature: Teachers can review student progress on all lessons in a course by view
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
     And the following "activities" exist:
-      | activity   | name             | course | idnumber    | retake |
-      | lesson     | Test lesson name | C1     | lesson1     | 1      |
-    And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
+      | activity   | name             | intro                   | course | idnumber    | retake |
+      | lesson     | Test lesson name | Test lesson description | C1     | lesson1     | 1      |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
 
   Scenario: View student progress for lesson that was never attempted
     Given I follow "Add a content page"
@@ -78,10 +80,14 @@ Feature: Teachers can review student progress on all lessons in a course by view
       | id_jumpto_1 | Next page |
     And I press "Save page"
     And I log out
-    When I am on the "Test lesson name" "lesson activity" page logged in as student1
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
     And I should see "First page contents"
     And I press "Next page"
-    Then I am on the "Course 1" course page logged in as teacher1
+    And I log out
+    Then I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to course participants
     And I follow "Student 1"
     And I follow "Complete report"
@@ -132,7 +138,10 @@ Feature: Teachers can review student progress on all lessons in a course by view
       | id_answer_editor_1 | Next page |
       | id_jumpto_1 | Next page |
     And I press "Save page"
-    When I am on the "Test lesson name" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
     And I should see "First page contents"
     And I press "Next page"
     And I should see "Second page contents"
@@ -148,7 +157,9 @@ Feature: Teachers can review student progress on all lessons in a course by view
     And I press "Submit"
     And I press "Continue"
     And I should see "Congratulations - end of lesson reached"
-    Then I am on the "Course 1" course page logged in as teacher1
+    And I log out
+    Then I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to course participants
     And I follow "Student 1"
     And I follow "Complete report"
@@ -174,12 +185,17 @@ Feature: Teachers can review student progress on all lessons in a course by view
       | id_answer_editor_1 | End of lesson |
       | id_jumpto_1 | End of lesson |
     And I press "Save page"
-    When I am on the "Test lesson name" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson name"
     And I should see "First page contents"
     And I press "Next page"
     And I should see "Second page contents"
     And I press "End of lesson"
-    Then I am on the "Course 1" course page logged in as teacher1
+    And I log out
+    Then I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to course participants
     And I follow "Student 1"
     And I follow "Complete report"

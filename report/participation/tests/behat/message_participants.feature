@@ -25,11 +25,14 @@ Feature: Use the particiaption report to message groups of students
       | activity    | book           |
       | name        | Test book name |
       | idnumber    | Test book name |
+      | description | Test book      |
       | idnumber    | book1          |
     And I am on the "Test book name" "book activity" page logged in as student1
+    And I log out
 
   Scenario: Message all students from the participation report
-    Given I am on the "Course 1" course page logged in as teacher1
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to "Reports" in current page administration
     And I click on "Course participation" "link"
     And I set the field "instanceid" to "Test book name"
@@ -43,7 +46,8 @@ Feature: Use the particiaption report to message groups of students
     And I should see "Message sent to 3 people"
 
   Scenario: Message students who have not participated in book
-    Given I am on the "Course 1" course page logged in as teacher1
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to "Reports" in current page administration
     And I click on "Course participation" "link"
     And I set the field "instanceid" to "Test book name"
@@ -62,7 +66,8 @@ Feature: Use the particiaption report to message groups of students
   Scenario: Ensure no message options when messaging is disabled
     Given the following config values are set as admin:
       | messaging | 0 |
-    And I am on the "Course 1" course page logged in as teacher1
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I navigate to "Reports" in current page administration
     And I click on "Course participation" "link"
     When I set the field "instanceid" to "Test book name"

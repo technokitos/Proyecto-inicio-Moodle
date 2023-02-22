@@ -16,10 +16,12 @@ Feature: link to gradebook on the end of lesson page
       | user | course | role |
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
+    And I log in as "teacher1"
     And the following "activities" exist:
-      | activity   | name        | course | idnumber    |
-      | lesson     | Test lesson | C1     | lesson1     |
-    And I am on the "Test lesson" "lesson activity" page logged in as teacher1
+      | activity   | name        | intro                   | course | idnumber    |
+      | lesson     | Test lesson | Test lesson description | C1     | lesson1     |
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I follow "Add a content page"
     And I set the following fields to these values:
       | Page title | First page name |
@@ -38,7 +40,10 @@ Feature: link to gradebook on the end of lesson page
     And I press "Save page"
 
   Scenario: Link to gradebook for non practice lesson
-    When I am on the "Test lesson" "lesson activity" page logged in as student1
+    Given I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I press "Next page"
     And I press "Next page"
     Then I should see "Congratulations - end of lesson reached"
@@ -49,22 +54,28 @@ Feature: link to gradebook on the end of lesson page
     And I should see "Test lesson"
 
   Scenario: No link to gradebook for non graded lesson
-    Given I am on the "Test lesson" "lesson activity editing" page
+    Given I navigate to "Settings" in current page administration
     And I set the following fields to these values:
         | Type | None |
     And I press "Save and display"
-    When I am on the "Test lesson" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I press "Next page"
     And I press "Next page"
     Then I should see "Congratulations - end of lesson reached"
     And I should not see "View grades"
 
   Scenario: No link to gradebook for practice lesson
-    Given I am on the "Test lesson" "lesson activity editing" page
+    Given I navigate to "Settings" in current page administration
     And I set the following fields to these values:
         | Practice lesson | Yes |
     And I press "Save and display"
-    When I am on the "Test lesson" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I press "Next page"
     And I press "Next page"
     Then I should see "Congratulations - end of lesson reached"
@@ -76,18 +87,25 @@ Feature: link to gradebook on the end of lesson page
     And I set the following fields to these values:
       | Show gradebook to students | No |
     And I press "Save and display"
-    When I am on the "Test lesson" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I press "Next page"
     And I press "Next page"
     Then I should see "Congratulations - end of lesson reached"
     And I should not see "View grades"
 
   Scenario: No link to gradebook if no gradereport/user:view capability
-    Given I log in as "admin"
+    Given I log out
+    And I log in as "admin"
     And I set the following system permissions of "Student" role:
       | capability | permission |
       | gradereport/user:view | Prevent |
-    When I am on the "Test lesson" "lesson activity" page logged in as student1
+    And I log out
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test lesson"
     And I press "Next page"
     And I press "Next page"
     Then I should see "Congratulations - end of lesson reached"

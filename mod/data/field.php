@@ -134,13 +134,6 @@ switch ($mode) {
                 $type = required_param('type', PARAM_FILE);
                 $field = data_get_field_new($type, $data);
 
-                if (!empty($validationerrors = $field->validate($fieldinput))) {
-                    $displaynoticebad = html_writer::alist($validationerrors);
-                    $mode = 'new';
-                    $newtype = $type;
-                    break;
-                }
-
                 $field->define_field($fieldinput);
                 $field->insert_field();
 
@@ -168,11 +161,6 @@ switch ($mode) {
 
             /// Create a field object to collect and store the data safely
                 $field = data_get_field_from_id($fid, $data);
-                if (!empty($validationerrors = $field->validate($fieldinput))) {
-                    $displaynoticebad = html_writer::alist($validationerrors);
-                    $mode = 'display';
-                    break;
-                }
                 $oldfieldname = $field->field->name;
 
                 $field->field->name = $fieldinput->name;
@@ -236,11 +224,10 @@ switch ($mode) {
                 } else {
                     $fieldtypename = $field->name();
                 }
-                echo $OUTPUT->confirm('<strong>' . $fieldtypename . ': ' . $field->field->name . '</strong><br /><br />' .
-                        get_string('confirmdeletefield', 'data'),
-                        'field.php?d=' . $data->id . '&mode=delete&fid=' . $fid . '&confirm=1',
-                        'field.php?d=' . $data->id,
-                        ['type' => single_button::BUTTON_DANGER]);
+                echo $OUTPUT->confirm('<strong>'.$fieldtypename.': '.$field->field->name.'</strong><br /><br />'.
+                            get_string('confirmdeletefield', 'data'),
+                            'field.php?d='.$data->id.'&mode=delete&fid='.$fid.'&confirm=1',
+                            'field.php?d='.$data->id);
 
                 echo $OUTPUT->footer();
                 exit;
@@ -368,9 +355,10 @@ if (($mode == 'new') && (!empty($newtype))) { // Adding a new field.
         ));
 
         $actionmenu = new action_menu();
-        $actionmenu->set_kebab_trigger();
+        $icon = $OUTPUT->pix_icon('i/menu', get_string('actions'));
+        $actionmenu->set_menu_trigger($icon, 'btn btn-icon d-flex align-items-center justify-content-center');
         $actionmenu->set_action_label(get_string('actions'));
-        $actionmenu->set_additional_classes('fields-actions');
+        $actionmenu->attributes['class'] .= ' fields-actions';
 
         // It display a notification when the field type does not exist.
         if ($field->type === 'unknown') {

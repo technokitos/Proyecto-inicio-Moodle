@@ -18,12 +18,11 @@ declare(strict_types=1);
 
 namespace core_reportbuilder\external;
 
-use core_collator;
 use pix_icon;
 use renderer_base;
 use core\external\exporter;
 use core_reportbuilder\datasource;
-use core_reportbuilder\local\report\column;
+use core_reportbuilder\local\models\column;
 
 /**
  * Custom report columns sorting exporter class
@@ -91,15 +90,19 @@ class custom_report_columns_sorting_exporter extends exporter {
         /** @var datasource $report */
         $report = $this->related['report'];
 
-        // Filter/retrieve all "sortable" active columns.
-        $sortablecolumns = array_filter($report->get_active_columns(), function(column $column): bool {
-            return $column->get_is_sortable();
+        $reportid = $report->get_report_persistent()->get('id');
+        $activecolumns = column::get_records(['reportid' => $reportid], 'sortorder');
+        $sortablecolumns = array_filter($activecolumns, function(column $persistent) use($report): bool {
+            $column = $report->get_column($persistent->get('uniqueidentifier'));
+            if ($column === null) {
+                return false;
+            }
+
+            return $column->set_aggregation($persistent->get('aggregation'))->get_is_sortable();
         });
 
-        $sortablecolumns = array_map(function(column $column) use ($report): array {
-            $persistent = $column->get_persistent();
-
-            $columntitle = $column->get_title();
+        $sortablecolumns = array_map(function(column $persistent) use ($report) {
+            $columntitle = $report->get_column($persistent->get('uniqueidentifier'))->get_title();
             $columnheading = $persistent->get_formatted_heading($report->get_context());
 
             $columnsortascending = ($persistent->get('sortdirection') == SORT_ASC);
@@ -121,8 +124,6 @@ class custom_report_columns_sorting_exporter extends exporter {
                 'sortenabledtitle' => get_string($sortenabledtitle, 'core_reportbuilder', $columntitle),
             ];
         }, $sortablecolumns);
-
-        core_collator::asort_array_of_arrays_by_key($sortablecolumns, 'sortorder', core_collator::SORT_NUMERIC);
 
         return [
             'hassortablecolumns' => !empty($sortablecolumns),

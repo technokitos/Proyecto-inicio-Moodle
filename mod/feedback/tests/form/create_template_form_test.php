@@ -68,7 +68,9 @@ class create_template_form_test extends \advanced_testcase {
      * @param bool $accessallowed
      * @param bool $public
      * @param bool $expectedispublicvalue
-     * @dataProvider createtemplate_form_with_modified_capabilities_provider
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @dataProvider test_createtemplate_form_with_modified_capabilities_provider
      */
     public function test_createtemplate_form_with_modified_capabilities(array $unassignedroles, bool $accessallowed,
             bool $public = false, bool $expectedispublicvalue = false) {
@@ -102,7 +104,7 @@ class create_template_form_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function createtemplate_form_with_modified_capabilities_provider(): array {
+    public function test_createtemplate_form_with_modified_capabilities_provider(): array {
         return [
             "Manager without edititems permission cannot create any templates" => [
                 ['mod/feedback:edititems'], false
@@ -131,7 +133,8 @@ class create_template_form_test extends \advanced_testcase {
      * @param string $loginas
      * @param bool $public
      * @param bool $accessallowed
-     * @dataProvider createtemplate_form_provider
+     * @dataProvider test_createtemplate_form_provider
+     * @throws \dml_exception
      */
     public function test_createtemplate_form(string $loginas, bool $public,
             bool $accessallowed = true) {
@@ -180,7 +183,7 @@ class create_template_form_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function createtemplate_form_provider(): array {
+    public function test_createtemplate_form_provider(): array {
         return [
             'Create a private template as an admin' => [
                 'admin', false

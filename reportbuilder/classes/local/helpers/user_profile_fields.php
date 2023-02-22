@@ -193,7 +193,7 @@ class user_profile_fields {
                     break;
                 case 'datetime':
                     $classname = date::class;
-                    $fieldsql = $DB->sql_cast_char2int($field, true);
+                    $fieldsql = $DB->sql_cast_char2int($field);
                     break;
                 case 'menu':
                     $classname = select::class;

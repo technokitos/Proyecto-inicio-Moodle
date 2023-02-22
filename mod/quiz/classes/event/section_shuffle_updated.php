@@ -32,6 +32,7 @@ namespace mod_quiz\event;
  *
  *      - int quizid: the id of the quiz.
  *      - bool shuffle: shuffle option value.
+ *      - int firstslotid: id of the slot which is right after the section break.
  *      - int firstslotnumber: slot number of the slot which is right after the section break.
  * }
  *
@@ -43,7 +44,7 @@ class section_shuffle_updated extends \core\event\base {
     protected function init() {
         $this->data['objecttable'] = 'quiz_sections';
         $this->data['crud'] = 'u';
-        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
     public static function get_name() {
@@ -52,7 +53,7 @@ class section_shuffle_updated extends \core\event\base {
 
     public function get_description() {
         return "The user with id '$this->userid' updated the section with id '{$this->objectid}' " .
-            "before the slot number '{$this->other['firstslotnumber']}' " .
+            "before the slot with id '{$this->other['firstslotid']}' and slot number '{$this->other['firstslotnumber']}' " .
             "belonging to the quiz with course module id '$this->contextinstanceid'. " .
             "Its shuffle option was set to '{$this->other['shuffle']}'.";
     }
@@ -78,6 +79,10 @@ class section_shuffle_updated extends \core\event\base {
             throw new \coding_exception('The \'quizid\' value must be set in other.');
         }
 
+        if (!isset($this->other['firstslotid'])) {
+            throw new \coding_exception('The \'firstslotid\' value must be set in other.');
+        }
+
         if (!isset($this->other['firstslotnumber'])) {
             throw new \coding_exception('The \'firstslotnumber\' value must be set in other.');
         }
@@ -95,6 +100,7 @@ class section_shuffle_updated extends \core\event\base {
     public static function get_other_mapping() {
         $othermapped = [];
         $othermapped['quizid'] = ['db' => 'quiz', 'restore' => 'quiz'];
+        $othermapped['firstslotid'] = ['db' => 'quiz_slots', 'restore' => 'quiz_question_instance'];
 
         return $othermapped;
     }

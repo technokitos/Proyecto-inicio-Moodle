@@ -16,32 +16,34 @@ Feature: Teacher can specify different display options for the resource
       | user | course | role |
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
-    And the following "activities" exist:
-      | activity | course | name   | defaultfilename                            | uploaded |
-      | resource | C1     | Myfile | mod/resource/tests/fixtures/samplefile.txt | 1        |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
 
   @javascript
   Scenario: Specifying no additional display options for a file resource
-    When I am on the "Myfile" "resource activity editing" page
+    When I add a "File" to section "1"
     And I set the following fields to these values:
-      | Show upload/modified date | 0 |
-      | showsize                  | 0 |
-      | showtype                  | 0 |
+      | Name                      | Myfile     |
+      | Show size                 | 0          |
+      | Show type                 | 0          |
+      | Show upload/modified date | 0          |
+    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
     Then ".resourcedetails" "css_element" should not exist
     And I am on "Course 1" course homepage
     And ".activity.resource .resourcelinkdetails" "css_element" should not exist
+    And I log out
 
   @javascript
   Scenario Outline: Specifying different display options for a file resource
-    When I am on the "Myfile" "resource activity editing" page
+    When I add a "File" to section "1"
     And I set the following fields to these values:
-      | display                   | 5          |
+      | Name                      | Myfile     |
+      | Display                   | Open       |
       | Show size                 | <showsize> |
       | Show type                 | <showtype> |
       | Show upload/modified date | <showdate> |
+    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
     Then I <seesize> see "6 bytes" in the ".resourcedetails" "css_element"
     And I <seetype> see "Text file" in the ".resourcedetails" "css_element"
@@ -50,6 +52,7 @@ Feature: Teacher can specify different display options for the resource
     And I <seesize> see "6 bytes" in the ".activity.resource .resourcelinkdetails" "css_element"
     And I <seetype> see "Text file" in the ".activity.resource .resourcelinkdetails" "css_element"
     And I <seedate> see "Uploaded" in the ".activity.resource .resourcelinkdetails" "css_element"
+    And I log out
 
     Examples:
       | showsize | showtype | showdate | seesize    | seetype    | seedate    |

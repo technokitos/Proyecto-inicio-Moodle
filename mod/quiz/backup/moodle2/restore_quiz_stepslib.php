@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-use mod_quiz\question\display_options;
-
 /**
  * Structure step to restore one quiz activity
  *
@@ -44,7 +42,7 @@ class restore_quiz_activity_structure_step extends restore_questions_activity_st
 
     protected function define_structure() {
 
-        $paths = [];
+        $paths = array();
         $userinfo = $this->get_setting_value('userinfo');
 
         $quiz = new restore_path_element('quiz', '/activity/quiz');
@@ -164,70 +162,70 @@ class restore_quiz_activity_structure_step extends restore_questions_activity_st
             $oldreview = $data->review;
 
             $data->reviewattempt =
-                    display_options::DURING |
+                    mod_quiz_display_options::DURING |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_RESPONSES ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_RESPONSES ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_RESPONSES ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewcorrectness =
-                    display_options::DURING |
+                    mod_quiz_display_options::DURING |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_SCORES ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_SCORES ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_SCORES ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewmarks =
-                    display_options::DURING |
+                    mod_quiz_display_options::DURING |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_SCORES ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_SCORES ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_SCORES ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewspecificfeedback =
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_FEEDBACK ?
-                            display_options::DURING : 0) |
+                            mod_quiz_display_options::DURING : 0) |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_FEEDBACK ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_FEEDBACK ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_FEEDBACK ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewgeneralfeedback =
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_GENERALFEEDBACK ?
-                            display_options::DURING : 0) |
+                            mod_quiz_display_options::DURING : 0) |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_GENERALFEEDBACK ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_GENERALFEEDBACK ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_GENERALFEEDBACK ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewrightanswer =
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_ANSWERS ?
-                            display_options::DURING : 0) |
+                            mod_quiz_display_options::DURING : 0) |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_ANSWERS ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_ANSWERS ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_ANSWERS ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
 
             $data->reviewoverallfeedback =
                     0 |
                     ($oldreview & QUIZ_OLD_IMMEDIATELY & QUIZ_OLD_OVERALLFEEDBACK ?
-                            display_options::IMMEDIATELY_AFTER : 0) |
+                            mod_quiz_display_options::IMMEDIATELY_AFTER : 0) |
                     ($oldreview & QUIZ_OLD_OPEN & QUIZ_OLD_OVERALLFEEDBACK ?
-                            display_options::LATER_WHILE_OPEN : 0) |
+                            mod_quiz_display_options::LATER_WHILE_OPEN : 0) |
                     ($oldreview & QUIZ_OLD_CLOSED & QUIZ_OLD_OVERALLFEEDBACK ?
-                            display_options::AFTER_CLOSE : 0);
+                            mod_quiz_display_options::AFTER_CLOSE : 0);
         }
 
         // The old popup column from from <= 2.1 need to be mapped to
@@ -568,7 +566,7 @@ class restore_quiz_activity_structure_step extends restore_questions_activity_st
 
         $this->process_quiz_attempt($data);
 
-        $quiz = $DB->get_record('quiz', ['id' => $this->get_new_parentid('quiz')]);
+        $quiz = $DB->get_record('quiz', array('id' => $this->get_new_parentid('quiz')));
         $quiz->oldquestions = $this->oldquizlayout;
         $this->process_legacy_quiz_attempt_data($data, $quiz);
     }
@@ -600,10 +598,10 @@ class restore_quiz_activity_structure_step extends restore_questions_activity_st
         $this->add_related_files('mod_quiz', 'feedback', 'quiz_feedback');
 
         if (!$this->sectioncreated) {
-            $DB->insert_record('quiz_sections', [
+            $DB->insert_record('quiz_sections', array(
                     'quizid' => $this->get_new_parentid('quiz'),
                     'firstslot' => 1, 'heading' => '',
-                    'shufflequestions' => $this->legacyshufflequestionsoption]);
+                    'shufflequestions' => $this->legacyshufflequestionsoption));
         }
     }
 }

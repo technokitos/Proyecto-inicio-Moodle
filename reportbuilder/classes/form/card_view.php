@@ -25,6 +25,7 @@ use core_reportbuilder\manager;
 use core_reportbuilder\permission;
 use core_reportbuilder\local\report\base;
 use core_reportbuilder\local\models\report;
+use core_reportbuilder\local\models\column;
 
 /**
  * Card view dynamic form
@@ -84,11 +85,11 @@ class card_view extends dynamic_form {
      */
     public function set_data_for_dynamic_submission(): void {
         $report = $this->get_report();
+        $totalcolumns = column::count_records(['reportid' => $report->get_report_persistent()->get('id')]);
         $settings = $report->get_settings_values();
-
         $defaults = [
             // Maximum value for 'cardview_visiblecolumns' should be the report total number of columns.
-            'visiblecolumns' => min($settings['cardview_visiblecolumns'] ?? 1, count($report->get_active_columns())),
+            'visiblecolumns' => min($settings['cardview_visiblecolumns'] ?? 1, $totalcolumns),
             'showfirsttitle' => $settings['cardview_showfirsttitle'] ?? 0,
         ];
         $this->set_data(array_merge($defaults, $this->_ajaxformdata));
@@ -107,17 +108,21 @@ class card_view extends dynamic_form {
      * Card view form definition
      */
     public function definition(): void {
-        $report = $this->get_report();
-
         $mform = $this->_form;
+
+        $reportid = $this->optional_param('reportid', 0, PARAM_INT);
+        $totalcolumns = column::count_records(['reportid' => $reportid]);
+        $visibilityarray = [];
+        // Generate select options from 1 to report total number of columns.
+        for ($i = 1; $i <= max($totalcolumns, 1); $i++) {
+            $visibilityarray[$i] = $i;
+        }
 
         $mform->addElement('hidden', 'reportid');
         $mform->setType('reportid', PARAM_INT);
 
-        // Generate select options from 1 to report total number of columns.
-        $visiblecolumns = range(1, max(count($report->get_active_columns()), 1));
         $mform->addElement('select', 'visiblecolumns', get_string('cardviewvisiblecolumns', 'core_reportbuilder'),
-            array_combine($visiblecolumns, $visiblecolumns));
+            $visibilityarray);
         $mform->setType('visiblecolumns', PARAM_INT);
 
         $mform->addElement('selectyesno', 'showfirsttitle', get_string('cardviewfirstcolumntitle', 'core_reportbuilder'));

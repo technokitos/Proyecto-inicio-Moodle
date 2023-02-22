@@ -18,7 +18,8 @@ Feature: Notification shown when user edit profile or preferences
   @javascript
   Scenario: Change own profile and has notification shown
     Given I log in as "unicorn"
-    And I open my profile in edit mode
+    And I follow "Profile" in the user menu
+    When I click on "Edit profile" "link" in the "region-main" "region"
     And I should see "Unicorn"
     And I should see "1"
     Then I set the field "Last name" to "Lil"
@@ -38,7 +39,8 @@ Feature: Notification shown when user edit profile or preferences
   @javascript
   Scenario: Do not show notification when cancel profile change
     Given I log in as "unicorn"
-    And I open my profile in edit mode
+    And I follow "Profile" in the user menu
+    When I click on "Edit profile" "link" in the "region-main" "region"
     And I should see "Unicorn"
     And I should see "1"
     Then I set the field "Last name" to "Lil"
@@ -47,7 +49,9 @@ Feature: Notification shown when user edit profile or preferences
 
   @javascript
   Scenario: Show notification after admin edited profile of another user
-    Given I am on the "unicorn" "user > editing" page logged in as "admin"
+    Given I log in as "admin"
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    When I click on "Edit" "link" in the "Unicorn 1" "table_row"
     And I expand all fieldsets
     Then I set the field "Last name" to "Lil"
     And I click on "Update profile" "button"
